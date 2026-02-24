@@ -5,6 +5,9 @@ const queryModel = require("../utils/queryModel");
 const router = express.Router();
 
 router.post("/", async (req, res) => {
+
+  console.log("Request Body:", req.body);
+  console.log("Request Headers:", req.headers);
   const { models, prompts } = req.body;
 
   const workbook = new ExcelJS.Workbook();
