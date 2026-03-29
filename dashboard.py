@@ -22,7 +22,7 @@ from google import genai
 # CONFIG
 # -----------------------
 API_URL = "https://chat.binghamton.edu/api/chat/completions"
-API_KEY = "sk-dddeec5e68bc4ae6aee77679a7d88c35" 
+API_KEY = "" 
 GEMINI_API_KEY = ""
 gemini_client = genai.Client(api_key=GEMINI_API_KEY)
 
@@ -524,7 +524,7 @@ with tab2:
 # -----------------------
 # TAB 3: Weekly AEO Report (Conductor-style)
 # -----------------------
-with tab3:  # Add tab3 to your tabs: tab1, tab2, tab3 = st.tabs([...])
+with tab3: 
     st.header("📊 Weekly AEO Report")
     st.caption("Conductor Monitoring-style weekly digest of your AI visibility data")
 
@@ -572,7 +572,7 @@ with tab3:  # Add tab3 to your tabs: tab1, tab2, tab3 = st.tabs([...])
 
     def compute_issues(df, comp_list):
         """Issues = prompts where competitors appear but target does not"""
-        issues = df[(df["Has_Target"] == False) & (df["Competitor_Mentions"] > 0)]
+        issues = df[(df["Has_Target"] == False) & (df["Competitor_Mentions"] > 0)].sort_values("Competitor_Mentions", ascending=False).drop_duplicates(subset=["Prompt"])
         return issues
 
     def build_conductor_pdf(metrics_now, metrics_prev, health_now, health_prev,
@@ -819,7 +819,7 @@ with tab3:  # Add tab3 to your tabs: tab1, tab2, tab3 = st.tabs([...])
             st.dataframe(pd.DataFrame(breakdown_rows), use_container_width=True)
 
             if not issues_now.empty:
-                st.subheader(f"⚠️ Open Issues ({issues_open})")
+                st.subheader(f"⚠️ Prompts {target_university} Missed ({issues_open})")
                 st.dataframe(issues_now[["Model", "Prompt", "Competitor_Mentions"]], use_container_width=True)
             else:
                 st.success("✅ No open issues — your university appeared in all competitive responses!")
